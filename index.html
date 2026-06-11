@@ -3,373 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Player de Vídeo</title>
+  <title>Vídeo</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #0f0f11;
-      --surface: #18181c;
-      --surface-2: #222228;
-      --border: rgba(255,255,255,0.08);
-      --text: #f0eee8;
-      --text-muted: #888780;
-      --accent: #7f77dd;
-      --accent-dim: rgba(127,119,221,0.15);
-      --radius: 12px;
-    }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      min-height: 100vh;
+      background: #0a0a0c;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2.5rem 1rem 4rem;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: system-ui, sans-serif;
+      padding: 1.5rem;
     }
-
-    header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    header h1 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
-    header p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-top: 0.4rem;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 820px;
-      overflow: hidden;
-    }
-
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab {
-      flex: 1;
-      padding: 0.9rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: color 0.15s, background 0.15s;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tab:hover { color: var(--text); background: var(--surface-2); }
-
-    .tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-      background: var(--accent-dim);
-    }
-
-    .panel { display: none; padding: 1.5rem; }
-    .panel.active { display: block; }
-
-    label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 0.65rem 0.9rem;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.15s;
-      margin-bottom: 1rem;
-    }
-
-    input:focus { border-color: var(--accent); }
-
-    .row { display: flex; gap: 1rem; }
-    .row > div { flex: 1; }
-
-    .btn {
-      width: 100%;
-      padding: 0.75rem;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      margin-top: 0.5rem;
-    }
-
-    .btn:hover { opacity: 0.85; }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-top: 0;
-    }
-
-    .btn-outline:hover { border-color: var(--accent); color: var(--text); }
 
     .player-wrap {
-      background: #000;
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-      aspect-ratio: 16 / 9;
-      display: none;
-    }
-
-    .player-wrap.visible { display: block; }
-
-    .player-wrap iframe,
-    .player-wrap video {
       width: 100%;
-      height: 100%;
-      border: none;
+      max-width: 960px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.07);
+    }
+
+    video {
+      width: 100%;
       display: block;
-    }
-
-    .player-section {
-      padding: 1.5rem;
-      display: none;
-    }
-
-    .player-section.visible { display: block; }
-
-    .player-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-
-    .tip {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      background: var(--surface-2);
-      border-radius: 8px;
-      padding: 0.6rem 0.8rem;
-      margin-bottom: 1rem;
-      border: 1px solid var(--border);
-      line-height: 1.5;
-    }
-
-    .error {
-      font-size: 0.85rem;
-      color: #e24b4a;
-      margin-top: -0.5rem;
-      margin-bottom: 0.8rem;
-      display: none;
-    }
-
-    @media (max-width: 500px) {
-      .row { flex-direction: column; gap: 0; }
+      aspect-ratio: 16 / 9;
+      background: #000;
     }
   </style>
 </head>
 <body>
-
-<header>
-  <h1>Player de Vídeo</h1>
-  <p>Cole um link do YouTube, Vimeo ou arquivo direto</p>
-</header>
-
-<div class="card">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('youtube', this)">YouTube</button>
-    <button class="tab" onclick="switchTab('vimeo', this)">Vimeo</button>
-    <button class="tab" onclick="switchTab('direto', this)">Link Direto</button>
-    <button class="tab" onclick="switchTab('embed', this)">HTML Embed</button>
+  <div class="player-wrap">
+    <video
+      src="https://rr4---sn-gpv7yn7e.googlevideo.com/videoplayback?expire=1781165653&ei=1f0parrdGObu2O8P_or1wQs&ip=2804:389:b183:b0a5:d43e:f835:6156:38f5&id=0d36b93d2d420f3c&itag=18&source=blogger&requiressl=yes&xpc=Egho7Zf3LnoBAQ==&cps=150&rms=au,au&susc=bl&svpuc=1&eaua=GrKwNU3Tdck&mime=video/mp4&vprv=1&rqh=1&dur=1420.132&lmt=1777997718136281&txp=1311224&sparams=expire,ei,ip,id,itag,source,requiressl,xpc,susc,svpuc,eaua,mime,vprv,rqh,dur,lmt&sig=AHEqNM4wRAIgEtzdeKyFfwn_tSnIkUXi19S0mqgC9P4x7IAPpa_mVN0CIF6KXFp0F2ENStZI4PPqDRNAbv6ZNBiKZjukCUd0rxTj&cpn=_LeqPoOP9e3tEVqp&c=WEB_EMBEDDED_PLAYER&cver=1.20260608.11.00-canary_control_1.20260609.07.00&redirect_counter=1&cm2rm=sn-xhcg5uxa-jo467e&rrc=191&req_id=f18a4eec719b36e2&cms_redirect=yes&cmsv=e&met=1781136867,&mh=m5&mm=29&mn=sn-gpv7yn7e&ms=rdu&mt=1781135803&mv=m&mvi=4&pl=44&lsparams=cps,met,mh,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRgIhANj2w45ae-tkyMUtrBbldrDiPBiqbO96-3u5quF652_OAiEAl-7RmwIixdho6ad5o9fD1V4Tg-7Jx7zL5rYWykQQq2E%3D"
+      controls
+      preload="metadata"
+    ></video>
   </div>
-
-  <!-- YouTube -->
-  <div id="tab-youtube" class="panel active">
-    <div class="tip">Cole o link completo ou somente o ID do vídeo.<br>Ex: <code>https://youtu.be/dQw4w9WgXcQ</code> ou <code>dQw4w9WgXcQ</code></div>
-    <label>URL ou ID do YouTube</label>
-    <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=..." />
-    <div class="row">
-      <div>
-        <label>Iniciar em (segundos)</label>
-        <input type="number" id="yt-start" placeholder="0" min="0" />
-      </div>
-      <div style="display:flex;align-items:flex-end;padding-bottom:1rem;">
-        <label style="display:flex;align-items:center;gap:0.5rem;text-transform:none;letter-spacing:0;font-size:0.85rem;cursor:pointer;">
-          <input type="checkbox" id="yt-autoplay" style="width:auto;margin:0;" /> Autoplay
-        </label>
-      </div>
-    </div>
-    <div id="yt-error" class="error">URL inválida. Verifique e tente novamente.</div>
-    <button class="btn" onclick="embedYouTube()">Carregar vídeo</button>
-  </div>
-
-  <!-- Vimeo -->
-  <div id="tab-vimeo" class="panel">
-    <div class="tip">Cole o link do Vimeo.<br>Ex: <code>https://vimeo.com/76979871</code></div>
-    <label>URL do Vimeo</label>
-    <input type="text" id="vi-url" placeholder="https://vimeo.com/..." />
-    <div id="vi-error" class="error">URL inválida. Verifique e tente novamente.</div>
-    <button class="btn" onclick="embedVimeo()">Carregar vídeo</button>
-  </div>
-
-  <!-- Direto -->
-  <div id="tab-direto" class="panel">
-    <div class="tip">Insira o link direto de um arquivo de vídeo (.mp4, .webm, .ogg).</div>
-    <label>URL do arquivo</label>
-    <input type="text" id="di-url" placeholder="https://exemplo.com/video.mp4" />
-    <button class="btn" onclick="embedDireto()">Carregar vídeo</button>
-  </div>
-
-  <!-- Embed code -->
-  <div id="tab-embed" class="panel">
-    <div class="tip">Cole o código <code>&lt;iframe&gt;</code> gerado por qualquer plataforma.</div>
-    <label>Código de incorporação</label>
-    <input type="text" id="em-code" placeholder='<iframe src="..." ...></iframe>' />
-    <button class="btn" onclick="embedCodigo()">Carregar vídeo</button>
-  </div>
-</div>
-
-<!-- Player -->
-<div class="card" id="player-card" style="margin-top:1.5rem; max-width:820px; width:100%; display:none;">
-  <div class="player-section visible" style="padding-bottom:0;">
-    <div id="player-title" class="player-title"></div>
-  </div>
-  <div style="padding: 0 1.5rem 1.5rem;">
-    <div id="player-wrap" class="player-wrap visible">
-      <div id="player-inner"></div>
-    </div>
-  </div>
-  <div style="padding: 0 1.5rem 1.5rem; display:flex; gap:0.75rem;">
-    <button class="btn btn-outline" style="flex:1;" onclick="copyCode()">Copiar código embed</button>
-    <button class="btn btn-outline" style="flex:1;" onclick="clearPlayer()">Limpar</button>
-  </div>
-</div>
-
-<script>
-  let currentEmbed = '';
-
-  function switchTab(name, el) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    el.classList.add('active');
-  }
-
-  function showPlayer(html, title) {
-    currentEmbed = html;
-    document.getElementById('player-inner').innerHTML = html;
-    document.getElementById('player-title').textContent = title;
-    const card = document.getElementById('player-card');
-    card.style.display = 'block';
-    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  function extractYtId(val) {
-    val = val.trim();
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-      /^([a-zA-Z0-9_-]{11})$/
-    ];
-    for (const p of patterns) {
-      const m = val.match(p);
-      if (m) return m[1];
-    }
-    return null;
-  }
-
-  function embedYouTube() {
-    const raw = document.getElementById('yt-url').value;
-    const start = parseInt(document.getElementById('yt-start').value) || 0;
-    const autoplay = document.getElementById('yt-autoplay').checked ? 1 : 0;
-    const err = document.getElementById('yt-error');
-    const id = extractYtId(raw);
-    if (!id) { err.style.display = 'block'; return; }
-    err.style.display = 'none';
-    const params = `autoplay=${autoplay}&start=${start}&rel=0`;
-    const html = `<iframe src="https://www.youtube.com/embed/${id}?${params}" allowfullscreen allow="autoplay; encrypted-media" style="width:100%;height:100%;border:none;"></iframe>`;
-    showPlayer(html, 'YouTube · ' + id);
-  }
-
-  function extractVimeoId(val) {
-    val = val.trim();
-    const m = val.match(/vimeo\.com\/(\d+)/);
-    if (m) return m[1];
-    if (/^\d+$/.test(val)) return val;
-    return null;
-  }
-
-  function embedVimeo() {
-    const raw = document.getElementById('vi-url').value;
-    const err = document.getElementById('vi-error');
-    const id = extractVimeoId(raw);
-    if (!id) { err.style.display = 'block'; return; }
-    err.style.display = 'none';
-    const html = `<iframe src="https://player.vimeo.com/video/${id}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture" style="width:100%;height:100%;border:none;"></iframe>`;
-    showPlayer(html, 'Vimeo · ' + id);
-  }
-
-  function embedDireto() {
-    const url = document.getElementById('di-url').value.trim();
-    if (!url) return;
-    const html = `<video src="${url}" controls style="width:100%;height:100%;background:#000;"></video>`;
-    showPlayer(html, 'Vídeo direto');
-  }
-
-  function embedCodigo() {
-    const code = document.getElementById('em-code').value.trim();
-    if (!code) return;
-    const wrapped = code.replace(/width="[^"]*"/g, 'width="100%"').replace(/height="[^"]*"/g, 'height="100%"');
-    showPlayer(wrapped, 'Código embed');
-  }
-
-  function copyCode() {
-    if (!currentEmbed) return;
-    navigator.clipboard.writeText(currentEmbed).then(() => {
-      const btn = event.target;
-      const orig = btn.textContent;
-      btn.textContent = 'Copiado!';
-      setTimeout(() => btn.textContent = orig, 1800);
-    });
-  }
-
-  function clearPlayer() {
-    document.getElementById('player-inner').innerHTML = '';
-    document.getElementById('player-card').style.display = 'none';
-    currentEmbed = '';
-  }
-
-  document.querySelectorAll('input[type="text"]').forEach(inp => {
-    inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.closest('.panel').querySelector('.btn').click(); });
-  });
-</script>
 </body>
 </html>
